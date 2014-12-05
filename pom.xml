@@ -1,0 +1,123 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>javactor</groupId>
+	<artifactId>javactor</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<description>Java actor API</description>
+	<name>javactor</name>
+
+	<scm>
+		<connection>scm:hg:http://mercurial/hg/javactor</connection>
+		<developerConnection>scm:hg:http://mercurial/hg/javactor</developerConnection>
+		<url>http://integration:8080/hudson/job/javactor/ws/</url>
+	</scm>
+	<ciManagement>
+		<system>Hudson</system>
+		<url>http://integration:8080/hudson/job/javactor/</url>
+	</ciManagement>
+
+	<repositories>
+		<repository>
+			<id>mavencentral</id>
+			<name>Central Maven Repo</name>
+			<url>http://repo.maven.apache.org/maven2/</url>
+		</repository>
+	</repositories>
+
+	<distributionManagement>
+		<repository>
+			<id>libs-release-local.digitalrapids.com</id>
+			<name>DRC Repository for Maven</name>
+			<url>http://dcm-maven-repo/libs-release-local</url>
+		</repository>
+		<snapshotRepository>
+			<id>libs-snapshot-local.digitalrapids.com</id>
+			<name>DRC Repository for Maven</name>
+			<url>http://dcm-maven-repo/libs-snapshot-local</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<properties>
+		<java.targetversion>1.7</java.targetversion>
+	</properties>
+	
+	<dependencies>
+		<!-- >dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>r13</version>
+		</dependency-->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.9.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>0.11.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.typesafe.akka</groupId>
+			<artifactId>akka-actor_2.11</artifactId>
+			<version>2.3.5</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.typesafe.akka</groupId>
+			<artifactId>akka-contrib_2.11</artifactId>
+			<version>2.3.5</version>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>4.0.6.RELEASE</version>
+			<optional>true</optional>
+		</dependency>
+		<!--
+		<dependency>
+			<groupId>org.vert-x</groupId>
+			<artifactId>vertx-lang-java</artifactId>
+			<version>1.3.1.final</version>
+			<optional>true</optional>
+		</dependency>
+		-->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava-base</artifactId>
+			<version>r03</version>
+		</dependency>
+		<dependency>
+			<groupId>com.typesafe.akka</groupId>
+			<artifactId>akka-testkit_2.11</artifactId>
+			<version>2.3.5</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>2.3.2</version>
+					<configuration>
+						<compilerVersion>${java.targetversion}</compilerVersion>
+						<source>${java.targetversion}</source>
+						<target>${java.targetversion}</target>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+</project>
