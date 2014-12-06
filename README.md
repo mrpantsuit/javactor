@@ -20,10 +20,10 @@ The principal value of Javactor at this time, though, is to make Java Akka easie
 
 Javactor uses reflection to invoke methods, so there would be some performance penalty. Also, there is some memory overhead on each actor. The degree of these effects is not yet known, as I have yet to measure them. This will not be a concern, of course, for applications using the actor pattern for purposes of concurrency correctness and resilience, rather than performance.
 
-Usage
------
+Creating javactors
+------------------
 
-Create javactor:
+Create javactor class:
 
 ```java
 public class MyActor
@@ -36,6 +36,8 @@ public class MyActor
   }
 }
 ```
+
+Note that it is not a subclass of anything.
 
 Create Akka actor based on this Javactor:
 
@@ -67,4 +69,46 @@ Object javactor = ctx.actorBuilder(SomeOtherJavactor.class, "otheractor").build(
 ```
 
 Note that the result of this method is an Object. A more specific type is unnecessary, as when using Javactors,
-methods are never called on actor references.
+methods are never called on actor references. (This design decision has not yet been finalized. I understand that an API should provide meaningful types, and may introduce a Javactor actor reference type.)
+
+The Javactor Context
+--------------------
+Every javactor uses a <code>JavactorContext</code> to interact with the Javactor system. This is obtained by creating a field in your javactor of the corresponding type. This field is set before any interaction with the javactor, e.g., handle methods, exception handler methods, actor lifecycle handler methods, etc.
+
+Be carful not to close over the ctx instance in callback methods, etc., as its value may change by the time the callback is invoked. This is the same gotcha as with regular Akka programming and closing over methods like UntypedActor.sender(). I considered passing the <code>JavactorContext</code> to javactors via a method parameter, which would obviate this problem, but have hesitated doing so in the interest of ease of use. This is still an open design issue.
+
+Sending messages
+----------------
+
+Javactor provides a sigle builder DSL for both sending messages to specific actors, and posting to the event stream.
+
+```java
+ctx.msg(new MyMsg()).to(someActor).fireAndForget();
+```
+
+Note the name of the method makes it clear that we don't care if we get a response.
+
+Now, simply omit the specification of the target actor, and the message will be posted to the event stream:
+
+```java
+ctx.msg(new MyMsg()).fireAndForget();
+```
+
+Listening to the event stream
+-----------------------------
+Javactors can handle methods on the event stream simply by invoking a config method on the actor builder and implementing the handle method for the desired message type.
+
+```java
+Object javactor = ctx.actorBuilder(MyJavactor.class, "myactor").subscribeToEventBus().build();
+```
+
+Then in the javactor:
+
+```java
+@Handle
+public void handle(SomeEventStreamMessage msg) {
+	// handle code here	
+}
+```
+
+The Javactor implementation will automatically subscribe this actor to the event stream, and call the handle method when the message of the handled type is posted.
