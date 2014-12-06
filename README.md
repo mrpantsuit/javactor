@@ -25,6 +25,7 @@ Usage
 
 Create javactor:
 
+```java
 public class MyActor
 {
   JavactorContext ctx;//Will be set by the Javactor implementation before each interaction with the Javactor
@@ -34,13 +35,18 @@ public class MyActor
     // Handle message here
   }
 }
+```
 
 Create Akka actor based on this Javactor:
 
+```java
 ActorSystem system = ActorSystem.create();
 system.actorOf(Props.create(new MyActorCreator(new MyActor())), "myactor");
+```
 
 Where MyActorCreator is:
+
+```java
 	@RequiredArgsConstructor//using project lombok for brevity
 	private static final class MyActorCreator implements
 		Creator<JavactorUntypedActor>
@@ -52,10 +58,13 @@ Where MyActorCreator is:
 			return AkkaJavactorBuilder.builder(myActor).build();
 		}
 	}
+```
 
 This might seem ownerous, but thereafter, all Javactors can create child actors like so:
 
+```java
 Object javactor = ctx.actorBuilder(SomeOtherJavactor.class, "otheractor").build();
+```
 
 Note that the result of this method is an Object. A more specific type is unnecessary, as when using Javactors,
 methods are never called on actor references.
