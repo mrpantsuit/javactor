@@ -4,7 +4,7 @@ javactor
 Java actor API, with an implementation for Akka.
 
 This began as a library to make using Java Akka easier. Though it's evolution, though, it became clear that clients
-of the API didn't need to have a dependency on Akka at all; their needs coulds be satisfied with an actor API general
+of the API didn't need to have a dependency on Akka at all; their needs could be satisfied with an actor API generic
 to any actor system provider. This is with the rather considerable caveat that many of the features Javactor exposes are
 provided by and modeled after Akka. In theory, though, any actor system providing the same features could supplant Akka
 in an application written to Javactor, without the need to rewrite any of the actors.
