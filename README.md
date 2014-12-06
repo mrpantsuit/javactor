@@ -74,6 +74,21 @@ Object javactor = ctx.actorBuilder(SomeOtherJavactor.class, "otheractor").build(
 Note that the result of this method is an Object. A more specific type is unnecessary, as when using Javactors,
 methods are never called on actor references. (This design decision has not yet been finalized. I understand that an API should provide meaningful types, and may introduce a Javactor actor reference type.)
 
+Need an actor to have some specific initialization state? Just specify a <code>JavactorPreparer</code>:
+
+```java
+child = ctx.actorBuilder(ChildActor.class, "child")
+	.preparer(new JavactorPreparer<BoomActor>()
+	{
+		@Override
+		public void prepare(BoomActor javactor)
+		{
+			javactor.setSomeState(someState);
+		}
+	})
+	.build();
+```
+
 The Javactor Context
 --------------------
 Every javactor uses a <code>JavactorContext</code> to interact with the Javactor system. This is obtained by creating a field in your javactor of the corresponding type. This field is set before any interaction with the javactor, e.g., handle methods, exception handler methods, actor lifecycle handler methods, etc.
@@ -89,12 +104,28 @@ Javactor provides a sigle builder DSL for both sending messages to specific acto
 ctx.msg(new MyMsg()).to(someActor).fireAndForget();
 ```
 
-Note the name of the method makes it clear that we don't care if we get a response.
+The <code>msg(..)</code> call creates the builer. Note the name of the method makes it clear that we don't care if we get a response.
 
 Now, simply omit the specification of the target actor, and the message will be posted to the event stream:
 
 ```java
-ctx.msg(new MyMsg()).fireAndForget();
+ctx.msg(new MyMsg()).fireAndForget();//off to the event stream
+```
+
+Requiring responses
+-------------------
+An actor system guarantees neither that a message will reach its target, nor that the reply will reach the sender. So, an actor that sends a message that requires a reply should always so two things: handle the reply message, and trigger a timeout if the reply does not arrive. Javactor enforces these requirements. To trigger this, send a message like so:
+
+```java
+ctx.msg(new MyMsg()).to(destActor).request(ReplyMsg.class, "Requesting reply");
+```
+
+If this is executed by an actor that is missing either the handling of <code>ReplyMsg</code> or <code>TimeoutMsg</code>, an error will result. The second argument to <code>request(..)</code> is set as a property of the timeout message. This is convenient for an error message indicating what the actor was waiting for.
+
+Note that this request mechanism can just as easily be used for messages posted to the event stream:
+
+```java
+ctx.msg(new MyMsg()).request(ReplyMsg.class, "Requesting reply");//no to() means post to event stream
 ```
 
 Listening to the event stream
