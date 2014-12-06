@@ -11,12 +11,12 @@ in an application written to Javactor, without the need to rewrite any of the ac
 
 The principal value of Javactor at this time, though, is to make Java Akka easier.  Here's how:
 * Actors are POJOs, and don't need to inherit from UntypedActor
-* Handle messages simply by implementing a method annotated with @Handle
-* Make supervisor decisions simply by implementing a method annotated with @OnException
-* Annotations for all the standard actor life cycle events, e.g., @PostStart
-* Builder DSL for sending messages, e.g., ctx.msg(new MyMessage()).to(someOtherActor).sender(replyTo).fireAndForget()
-* Safety for message sends that should receive a response, e.g., ctx.msg(xxx).to(someActor).request(ReplyMsg.class). Javactor will ensure that the sender has a corresponding handle method for the reply message type. It will also ensure the sender handles a timeout message, which is sent if the reply does not arrive within a timeout.
-* Builder DSL for scheduling messages, e.g., ctx.schedule(new MyMessage()).to(ctx.self()).delay(1, TimeUnit.SECONDS).period(2, TimeUnit.MINUTES).go();
+* Handle messages simply by implementing a method annotated with <code>@Handle</code>
+* Make supervisor decisions simply by implementing a method annotated with <code>@OnException</code>
+* Annotations for all the standard actor life cycle events, e.g., <code>@PostStart</code>
+* Builder DSL for sending messages, e.g., <code>ctx.msg(new MyMessage()).to(someOtherActor).sender(replyTo).fireAndForget()</code>
+* Safety for message sends that should receive a response, e.g., <code>ctx.msg(xxx).to(someActor).request(ReplyMsg.class)</code>. Javactor will ensure that the sender has a corresponding handle method for the reply message type. It will also ensure the sender handles a timeout message, which is sent if the reply does not arrive within a timeout.
+* Builder DSL for scheduling messages, e.g., <code>ctx.schedule(new MyMessage()).to(ctx.self()).delay(1, TimeUnit.SECONDS).period(2, TimeUnit.MINUTES).go()</code>
 
 Performance
 -----------
