@@ -78,10 +78,10 @@ Need an actor to have some specific initialization state? Just specify a <code>J
 
 ```java
 child = ctx.actorBuilder(ChildActor.class, "child")
-	.preparer(new JavactorPreparer<BoomActor>()
+	.preparer(new JavactorPreparer<ChildActor>()
 	{
 		@Override
-		public void prepare(BoomActor javactor)
+		public void prepare(ChildActor javactor)
 		{
 			javactor.setSomeState(someState);
 		}
