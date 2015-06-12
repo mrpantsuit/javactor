@@ -114,7 +114,7 @@ ctx.msg(new MyMsg()).fireAndForget();//off to the event stream
 
 Requiring responses
 -------------------
-An actor system guarantees neither that a message will reach its target, nor that the reply will reach the sender. So, an actor that sends a message that requires a reply should always so two things: handle the reply message, and trigger a timeout if the reply does not arrive. Javactor enforces these requirements. To trigger this, send a message like so:
+An actor system guarantees neither that a message will reach its target, nor that the reply will reach the sender. So, an actor that sends a message that requires a reply should always do two things: handle the reply message, and trigger a timeout if the reply does not arrive. Javactor enforces these requirements. To trigger this, send a message like so:
 
 ```java
 ctx.msg(new MyMsg()).to(destActor).request(ReplyMsg.class, "Requesting reply");
